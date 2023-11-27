@@ -9,11 +9,6 @@
   notify:
     - restart jabber
 
-- name: enable jabber service
-  template:
-    src: ejabberd.j2
-    dest: /etc/rc.conf.d/ejabberd
-
 - name: install cert updater
   copy:
     src: update_certs.sh
@@ -45,5 +40,19 @@
   template:
     src: ejabberd.yml.j2
     dest: /usr/local/etc/ejabberd/ejabberd.yml
+  notify:
+    - restart jabber
+
+- name: configure ejabberdctl
+  template:
+    src: ejabberdctl.cfg.j2
+    dest: /usr/local/etc/ejabberd/ejabberdctl.cfg
+  notify:
+    - restart jabber
+
+- name: enable jabber service
+  template:
+    src: ejabberd.j2
+    dest: /etc/rc.conf.d/ejabberd
   notify:
     - restart jabber
