@@ -1,0 +1,5 @@
+---
+jabber_domains:
+  - "{{ jabber_domain }}"
+
+ldap_password: "D4MpHDX5Ra7cAoe9myXZERZucJYY3RSr"

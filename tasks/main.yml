@@ -8,14 +8,7 @@
     name: "{{ item.name }}"
   notify:
     - restart jabber
-
-- name: ensure certificate file exists
-  file:
-    name: /usr/local/etc/ejabberd/certs.pem
-    mode: 0600
-    owner: ejabberd
-    group: ejabberd
-    state: touch
+    - wait
 
 - name: install cert updater
   copy:
@@ -25,6 +18,16 @@
 
 - name: convert cert from letsencrypt
   command: /usr/local/bin/update_certs.sh
+  notify:
+    - reload jabber
+
+- name: ensure certificate file exists
+  file:
+    name: /usr/local/etc/ejabberd/certs.pem
+    mode: 0600
+    owner: ejabberd
+    group: ejabberd
+    state: file
 
 - name: create upload dir
   file:
@@ -41,7 +44,7 @@
     owner: ejabberd
     group: ejabberd
   notify:
-    - restart jabber
+    - reload jabber
 
 - name: configure ejabberdctl
   template:
@@ -50,7 +53,7 @@
     owner: ejabberd
     group: ejabberd
   notify:
-    - restart jabber
+    - reload jabber
 
 - name: enable jabber service
   template:
@@ -58,3 +61,4 @@
     dest: /etc/rc.conf.d/ejabberd
   notify:
     - restart jabber
+    - wait

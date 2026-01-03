@@ -1,5 +1,7 @@
 hosts:
-  - {{ jabber_domain }}
+{% for domain in jabber_domains %}
+  - {{ domain }}
+{% endfor %}
 
 loglevel: info
 
@@ -202,6 +204,8 @@ ldap_servers:
   - "ldap.{{ hoster.stdout }}"
 ldap_encrypt: tls
 ldap_base: "dc=account,dc=ldap"
+ldap_rootdn: "cn=jabber,dc=service,dc=ldap"
+ldap_password: "{{ ldap_password }}"
 ldap_uids:
   "mail": "%u@%d"
-ldap_filter: "(&(objectClass=person)(userClass=jabber))"
+ldap_filter: "(&(objectClass=person)(memberOf=cn=jabber,dc=group,dc=ldap)(userClass=active))"

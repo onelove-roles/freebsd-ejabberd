@@ -3,3 +3,12 @@
   service:
     name: ejabberd
     state: restarted
+
+- name: wait
+  pause:
+    seconds: 3
+
+- name: reload jabber
+  service:
+    name: ejabberd
+    state: reloaded
