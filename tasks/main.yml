@@ -9,37 +9,37 @@
   notify:
     - restart jabber
 
+- name: ensure certificate file exists
+  file:
+    name: /usr/local/etc/ejabberd/certs.pem
+    mode: 0600
+    owner: ejabberd
+    group: ejabberd
+    state: touch
+
 - name: install cert updater
   copy:
     src: update_certs.sh
     dest: /usr/local/bin/update_certs.sh
     mode: 0755
 
-- name: create certs dir
-  file:
-    name: "/usr/local/etc/ejabberd/certs"
-    mode: 0700
-    owner: ejabberd
-    group: ejabberd
-    state: directory
+- name: convert cert from letsencrypt
+  command: /usr/local/bin/update_certs.sh
 
 - name: create upload dir
   file:
-    name: "/var/cache/ejabberd"
+    name: /var/cache/ejabberd
     mode: 0700
     owner: ejabberd
     group: ejabberd
     state: directory
-
-- name: convert cert from letsencrypt
-  command: /usr/local/bin/update_certs.sh "{{ jabber_domain }}"
-  args:
-    creates: "/usr/local/etc/ejabberd/certs/{{ jabber_domain }}.key"
 
 - name: configure jabber
   template:
     src: ejabberd.yml.j2
     dest: /usr/local/etc/ejabberd/ejabberd.yml
+    owner: ejabberd
+    group: ejabberd
   notify:
     - restart jabber
 
@@ -47,6 +47,8 @@
   template:
     src: ejabberdctl.cfg.j2
     dest: /usr/local/etc/ejabberd/ejabberdctl.cfg
+    owner: ejabberd
+    group: ejabberd
   notify:
     - restart jabber
 

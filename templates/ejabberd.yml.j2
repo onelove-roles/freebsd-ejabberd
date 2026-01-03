@@ -5,8 +5,7 @@ loglevel: info
 
 ## If you already have certificates, list them here
 certfiles:
- - /usr/local/etc/ejabberd/certs/{{ jabber_domain }}.crt
- - /usr/local/etc/ejabberd/certs/{{ jabber_domain }}.key
+ - /usr/local/etc/ejabberd/certs.pem
 
 listen:
 {% for address in jabber_addresses %}
@@ -200,7 +199,7 @@ modules:
 auth_method: ldap
 auth_use_cache: false
 ldap_servers:
-  - "ldap.{{ jabber_domain }}"
+  - "ldap.{{ hoster.stdout }}"
 ldap_encrypt: tls
 ldap_base: "dc=account,dc=ldap"
 ldap_uids:
